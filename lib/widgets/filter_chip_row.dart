@@ -76,8 +76,8 @@ class FilterChipRow extends StatelessWidget {
                   style: TextStyle(
                     color: selected
                         ? const Color.fromARGB(255, 67, 136, 192)
-                        : const Color(0xFF222B45),
-                    fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                        : const Color.fromARGB(255, 23, 61, 177),
+                    fontWeight: FontWeight.bold,
                     fontSize: 15,
                   ),
                 ),

@@ -46,7 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
               actions: [
                 IconButton(
                   icon: const Icon(Icons.search, color: Color(0xFF222B45)),
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Center(child: Text('البحث'))),
+                    );
+                  },
                 ),
               ],
               iconTheme: const IconThemeData(color: Color(0xFF222B45)),
@@ -141,7 +145,13 @@ class _CartBar extends StatelessWidget {
                   const Spacer(),
 
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(child: Text('عرض السلة')),
+                        ),
+                      );
+                    },
                     child: const Row(
                       children: [
                         Text(
