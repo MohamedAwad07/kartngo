@@ -1,6 +1,1 @@
-import 'package:flutter/material.dart';
-
-// Provider for app state management
-class AppProvider extends ChangeNotifier {
-  // TODO: Add state variables and methods
-} 
+// Use ProductProvider in product_provider.dart for product-related state management. 
