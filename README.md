@@ -8,6 +8,10 @@
 
 ---
 
+## Demo App (Kindly click on the image below to watch the video)
+
+[![Demo Video](assets/images/ours.jpg)](https://drive.google.com/file/d/121jGvjMrMt0sW1oJPchMmod4IiA-9x4j/view?usp=drivesdk)
+
 ## ProxyAI Prompts Used
 
 ### 1. Project Structure & Layers
@@ -39,6 +43,16 @@
 **Integration:**
 
 - ProxyAI generated the HomeScreen, FilterChipRow, and ProductCard widgets, closely matching the original design. The UI was refined iteratively to achieve pixel-perfect accuracy.
+
+### 4. Refactor Code into Widgets
+
+**Prompt:**
+
+> now refactor this @home_screen.dart code and store it in @/widgets to match the MVVM model architecture principle
+
+**Integration:**
+
+- ProxyAI extracted the filter chip row and product card logic into reusable widgets (`FilterChipRow` and `ProductCard`) in the `widgets/` directory. The HomeScreen was updated to use these widgets, improving code organization and maintainability.
 
 ---
 
