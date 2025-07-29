@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kartngo/models/product.dart';
 import 'package:kartngo/providers/product_provider.dart';
+import 'package:kartngo/screens/demo_screen.dart';
 import 'package:kartngo/widgets/filter_chip_row.dart';
 import 'package:kartngo/widgets/product_card.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,27 @@ class _HomeScreenState extends State<HomeScreen> {
     'أجبان',
   ];
   int selectedFilter = 0;
+  List<Product> filteredProducts = [];
+  String searchText = '';
+
+  void filterProducts(List<Product> allProducts) {
+    List<Product> temp = allProducts;
+    // Apply filter chip logic
+    if (selectedFilter == 1) {
+      temp = temp.where((p) => p.name.contains('Steakhouse')).toList();
+    } else if (selectedFilter == 2) {
+      temp = temp.where((p) => p.name.contains('Cheese')).toList();
+    } else if (selectedFilter == 3) {
+      temp = temp.where((p) => p.name.contains('Whopper')).toList();
+    }
+    // Apply search
+    if (searchText.isNotEmpty) {
+      temp = temp
+          .where((p) => p.name.toLowerCase().contains(searchText.toLowerCase()))
+          .toList();
+    }
+    filteredProducts = temp;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +66,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 20,
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.search, color: Color(0xFF222B45)),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Center(child: Text('البحث'))),
-                    );
-                  },
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Color(0xFF222B45),
                 ),
-              ],
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DemoScreen()),
+                  );
+                },
+              ),
               iconTheme: const IconThemeData(color: Color(0xFF222B45)),
             ),
           ),
@@ -62,8 +87,35 @@ class _HomeScreenState extends State<HomeScreen> {
             if (provider.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
+            filterProducts(provider.products);
             return Column(
               children: [
+                // Search bar
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'ابحث عن منتج...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 0,
+                        horizontal: 16,
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchText = value;
+                        filterProducts(provider.products);
+                      });
+                    },
+                  ),
+                ),
                 // Filter chips row
                 FilterChipRow(
                   filters: filters,
@@ -71,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onFilterSelected: (index) {
                     setState(() {
                       selectedFilter = index;
-                      // TODO: Optionally filter products based on selection
+                      filterProducts(provider.products);
                     });
                   },
                 ),
@@ -86,10 +138,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
                         ),
-                    itemCount: provider.products.length,
+                    itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
-                      final product = provider.products[index];
-                      return ProductCard(product: product);
+                      final product = filteredProducts[index];
+                      return GestureDetector(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Center(
+                                child: Text(
+                                  product.name,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        child: ProductCard(product: product),
+                      );
                     },
                   ),
                 ),
@@ -115,7 +185,6 @@ class _CartBar extends StatelessWidget {
     );
     return Container(
       margin: const EdgeInsets.all(12),
-      // padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       child: Row(
         children: [
           Expanded(
