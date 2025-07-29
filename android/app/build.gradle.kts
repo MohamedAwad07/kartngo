@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.example.kartngo"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -39,6 +39,11 @@ android {
     }
 }
 
+dependencies {
+
+     implementation("androidx.appcompat:appcompat:1.6.1")
+     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+}
 flutter {
     source = "../.."
 }

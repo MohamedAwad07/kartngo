@@ -30,9 +30,51 @@ class ProductProvider extends ChangeNotifier {
       version: 1,
     );
     _repository = AppRepository(_db);
+    await _insertMockDataIfNeeded();
     await loadProducts();
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<void> _insertMockDataIfNeeded() async {
+    final existing = await _repository.getProducts();
+    if (existing.isEmpty) {
+      final demoProducts = [
+        Product(
+          name: 'Double Whopper',
+          price: 29.57,
+          imageUrl: 'https://static.bkdelivery.com.sa/Images/Items/DoubleWhopper.png',
+        ),
+        Product(
+          name: 'Steakhouse XI',
+          price: 35.65,
+          imageUrl: 'https://static.bkdelivery.com.sa/Images/Items/SteakhouseXI.png',
+        ),
+        Product(
+          name: 'Chicken Steakhouse',
+          price: 37.39,
+          imageUrl: 'https://static.bkdelivery.com.sa/Images/Items/ChickenSteakhouse.png',
+        ),
+        Product(
+          name: 'Steakhouse',
+          price: 30.43,
+          imageUrl: 'https://static.bkdelivery.com.sa/Images/Items/Steakhouse.png',
+        ),
+        Product(
+          name: 'Quattro Cheese Grill',
+          price: 29.57,
+          imageUrl: 'https://static.bkdelivery.com.sa/Images/Items/QuattroCheeseGrill.png',
+        ),
+        Product(
+          name: 'Quattro Cheese Chicken',
+          price: 29.57,
+          imageUrl: 'https://static.bkdelivery.com.sa/Images/Items/QuattroCheeseChicken.png',
+        ),
+      ];
+      for (final p in demoProducts) {
+        await _repository.addProduct(p);
+      }
+    }
   }
 
   Future<void> loadProducts() async {
